@@ -7,7 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ShopAdapter1: RecyclerView.Adapter<ShopAdapter1.ViewHolder>() {
+class ShopAdapter_grid : RecyclerView.Adapter<ShopAdapter_grid.ViewHolder>() {
+    private val magic_list: ArrayList<MagicItem> = arrayListOf()
     private var buyListener : ItemClickListener? = null
 
     interface ItemClickListener{
@@ -17,13 +18,10 @@ class ShopAdapter1: RecyclerView.Adapter<ShopAdapter1.ViewHolder>() {
         buyListener = listener
     }
 
-
-    private val magic_list: ArrayList<MagicItem> = arrayListOf()
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val inflater = LayoutInflater.from(parent.context)
-            val view = inflater.inflate(R.layout.magic_list_view, parent, false)
-            return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(R.layout.grid_itemview, parent, false)
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -34,21 +32,19 @@ class ShopAdapter1: RecyclerView.Adapter<ShopAdapter1.ViewHolder>() {
         holder.bind(magic_list[position])
     }
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val imageView = view.findViewById<ImageView>(R.id.img_magic1)
-        val tv_name = view.findViewById<TextView>(R.id.tv_name)
-        var tv_price = view.findViewById<TextView>(R.id.tv_price)
-        val soldout = view.findViewById<TextView>(R.id.tv_soldout1)
+        val imageView = view.findViewById<ImageView>(R.id.img_magic2)
+        val soldou2 = view.findViewById<TextView>(R.id.tv_soldout2)
 
         fun bind(item: MagicItem){
             imageView.setImageResource(item.image)
-            tv_name.setText(item.name)
-            tv_price.text = "$ ${item.price.toString()}"
-
+            itemView.setOnClickListener{
+                buyListener?.toClick(item)
+            }
             if (item.isPurchased == true){
-                soldout.visibility = View.VISIBLE
+                soldou2.visibility = View.VISIBLE
                 itemView.isEnabled = false
             }else{
-                soldout.visibility = View.INVISIBLE
+                soldou2.visibility = View.INVISIBLE
                 itemView.isEnabled = true
 
             }

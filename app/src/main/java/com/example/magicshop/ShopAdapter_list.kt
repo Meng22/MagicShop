@@ -7,8 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ShopAdapter2 : RecyclerView.Adapter<ShopAdapter2.ViewHolder>() {
-    private val magic_list: ArrayList<MagicItem> = arrayListOf()
+class ShopAdapter_list: RecyclerView.Adapter<ShopAdapter_list.ViewHolder>() {
     private var buyListener : ItemClickListener? = null
 
     interface ItemClickListener{
@@ -18,10 +17,13 @@ class ShopAdapter2 : RecyclerView.Adapter<ShopAdapter2.ViewHolder>() {
         buyListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.magic_grid_view, parent, false)
-        return ViewHolder(view)
+
+    private val magic_list: ArrayList<MagicItem> = arrayListOf()
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val view = inflater.inflate(R.layout.list_itemview, parent, false)
+            return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -32,19 +34,21 @@ class ShopAdapter2 : RecyclerView.Adapter<ShopAdapter2.ViewHolder>() {
         holder.bind(magic_list[position])
     }
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val imageView = view.findViewById<ImageView>(R.id.img_magic2)
-        val soldou2 = view.findViewById<TextView>(R.id.tv_soldout2)
+        val imageView = view.findViewById<ImageView>(R.id.img_magic1)
+        val tv_name = view.findViewById<TextView>(R.id.tv_name)
+        var tv_price = view.findViewById<TextView>(R.id.tv_price)
+        val soldout = view.findViewById<TextView>(R.id.tv_soldout1)
 
         fun bind(item: MagicItem){
             imageView.setImageResource(item.image)
-            itemView.setOnClickListener{
-                buyListener?.toClick(item)
-            }
+            tv_name.setText(item.name)
+            tv_price.text = "$ ${item.price.toString()}"
+
             if (item.isPurchased == true){
-                soldou2.visibility = View.VISIBLE
+                soldout.visibility = View.VISIBLE
                 itemView.isEnabled = false
             }else{
-                soldou2.visibility = View.INVISIBLE
+                soldout.visibility = View.INVISIBLE
                 itemView.isEnabled = true
 
             }

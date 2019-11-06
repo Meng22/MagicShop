@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Adapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,8 +18,8 @@ import kotlinx.android.synthetic.main.activity_shop.*
 
 class ShopActivity : AppCompatActivity() {
     private var money: Int = 0
-    private val shopAdapter1 = ShopAdapter1()
-    private val shopAdapter2 = ShopAdapter2()
+    private val shopAdapter1 = ShopAdapter_list()
+    private val shopAdapter2 = ShopAdapter_grid()
     private var mode = false
     private var checkList = arrayListOf(1)
     lateinit var storage1: SharedPreferences
@@ -110,7 +109,7 @@ class ShopActivity : AppCompatActivity() {
     fun listAdapter(list: ArrayList<MagicItem>){
         rv_shop.layoutManager = LinearLayoutManager(this)
         rv_shop.adapter = shopAdapter1
-        shopAdapter1.setToClick(object : ShopAdapter1.ItemClickListener{
+        shopAdapter1.setToClick(object : ShopAdapter_list.ItemClickListener{
             override fun toClick(item: MagicItem) {
                 purchaseDialog(item)
             }
@@ -121,7 +120,7 @@ class ShopActivity : AppCompatActivity() {
     fun gridAdapter(list: ArrayList<MagicItem>){
         rv_shop.layoutManager = GridLayoutManager(this, 4)
         rv_shop.adapter = shopAdapter2
-        shopAdapter2.setToClick(object : ShopAdapter2.ItemClickListener{
+        shopAdapter2.setToClick(object : ShopAdapter_grid.ItemClickListener{
             override fun toClick(item: MagicItem) {
                 purchaseDialog(item)
             }
