@@ -7,7 +7,6 @@ class ShopList {
         val list3 = list_LEVEL3
     }
 }
-
     val list_LEVEL1= arrayListOf(
         MagicItem((R.drawable.level1_1), "保護罩  Shield", 800,1),
         MagicItem((R.drawable.level1_2), "光箭  Energy Bolt", 300,1),
@@ -18,7 +17,6 @@ class ShopList {
         MagicItem((R.drawable.level1_7), "神聖武器  Holy Weapon", 400,1),
         MagicItem((R.drawable.level1_8), "風刃  Wind Shuriken", 1000,1)
         )
-
     val list_LEVEL2: ArrayList<MagicItem> = arrayListOf(
         MagicItem((R.drawable.level2_1), "地獄之牙  Stalac", 600,2),
         MagicItem((R.drawable.level2_2), "寒冷戰慄  Chill Touch", 800,2),
@@ -40,3 +38,5 @@ class ShopList {
         MagicItem((R.drawable.level3_7), "闇盲咒術  Curse: Blind", 2000,3)
 
     )
+
+

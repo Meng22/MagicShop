@@ -14,6 +14,7 @@ class MagicListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_magic_list)
 
+
         rv_level1.layoutManager = GridLayoutManager(this,4)
         rv_level1.adapter = level1_Adapter
         level1_Adapter.update(ShopList.list1)

@@ -37,35 +37,47 @@ class ShopActivity : AppCompatActivity() {
         tv_money.text = money.toString()
         //初始畫面
         switchList(1)
+        menu_L1.isSelected = true
+        menu_list.isSelected = true
 
         //切換魔法等級
         menu_L1.setOnClickListener {
             switchList(1)
             checkType(1)
+            menu_L1.isSelected = true
+            menu_L2.isSelected = false
+            menu_L3.isSelected = false
+
         }
         menu_L2.setOnClickListener {
             switchList(2)
             checkType(2)
+            menu_L2.isSelected = true
+            menu_L1.isSelected = false
+            menu_L3.isSelected = false
 
         }
         menu_L3.setOnClickListener {
             switchList(3)
             checkType(3)
+            menu_L3.isSelected = true
+            menu_L1.isSelected = false
+            menu_L2.isSelected = false
         }
 
         //切換檢視狀態
-        btn_list.setOnClickListener {
+        menu_list.setOnClickListener {
             mode = false
             changeType()
+            menu_list.isSelected = true
+            menu_grid.isSelected = false
         }
-        btn_grid.setOnClickListener {
+        menu_grid.setOnClickListener {
             mode = true
             changeType()
+            menu_grid.isSelected = true
+            menu_list.isSelected = false
         }
-
-
-
-
     }
 
     override fun onBackPressed() {

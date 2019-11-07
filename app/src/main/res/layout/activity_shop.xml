@@ -14,35 +14,36 @@
             android:id="@+id/linearLayout1">
         <TextView
                 android:text="L1"
-                android:background="@drawable/menu_background"
+                android:background="@color/ic_clikable"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" android:id="@+id/menu_L1" android:layout_weight="1"
-                android:textSize="36sp" android:textColor="#F7FFFFFF" android:gravity="center"/>
+                android:textSize="36sp" android:textColor="#F7FFFFFF" android:gravity="center"
+                android:textIsSelectable="false"/>
         <TextView
                 android:text="L2"
                 android:layout_width="wrap_content"
-                android:background="@drawable/menu_background"
+                android:background="@color/ic_clikable"
                 android:layout_height="match_parent" android:id="@+id/menu_L2" android:layout_weight="1"
                 android:textSize="36sp" android:textColor="#F7FFFFFF" android:gravity="center"/>
         <TextView
                 android:text="L3"
                 android:layout_width="wrap_content"
-                android:background="@drawable/menu_background"
+                android:background="@color/ic_clikable"
                 android:layout_height="match_parent" android:id="@+id/menu_L3" android:layout_weight="1"
                 android:textSize="36sp" android:textColor="#F7FFFFFF" android:gravity="center"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/menu_background"
+                android:background="@color/ic_clikable"
                 android:src="@drawable/ic_list"
-                android:id="@+id/btn_list"
+                android:id="@+id/menu_list"
                 android:layout_weight="1" android:padding="16dp"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/menu_background"
+                android:background="@color/ic_clikable"
                 android:src="@drawable/ic_grid"
-                android:id="@+id/btn_grid"
+                android:id="@+id/menu_grid"
                 android:layout_weight="1" android:padding="16dp"/>
     </LinearLayout>
     <LinearLayout
