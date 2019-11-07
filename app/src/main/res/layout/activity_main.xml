@@ -80,12 +80,4 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="65dp" android:layout_marginStart="65dp" android:layout_marginBottom="89dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@drawable/ic_refresh"
-            android:background="@android:color/transparent"
-            android:id="@+id/btn_refresh"
-            app:layout_constraintTop_toTopOf="@id/img_banner"
-            android:layout_marginTop="10dp" app:layout_constraintEnd_toEndOf="@id/img_banner"
-            android:layout_marginRight="10dp" android:layout_marginEnd="10dp" android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

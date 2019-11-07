@@ -33,23 +33,10 @@ class MainActivity : AppCompatActivity() {
 
         //點擊娃娃增加金錢
         upperButton.setOnClickListener {
-            btn_refresh.visibility = View.VISIBLE
-            numberList.add(1)
-            checkNumberList()
+            checkNumberList2(1)
         }
         downerButton.setOnClickListener {
-            btn_refresh.visibility = View.VISIBLE
-            numberList.add(2)
-
-            if (numberList == bonusList){
-                money = money + 100
-                tv_money.setText(money.toString())
-            }
-            checkNumberList()
-        }
-        btn_refresh.setOnClickListener{
-            numberList.clear()
-            btn_refresh.visibility = View.GONE
+            checkNumberList2(2)
         }
     }
 
@@ -65,13 +52,37 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+//    fun checkNumberList(){
+//        if (numberList.size >= 7){
+//            numberList.clear()
+//            btn_refresh.visibility = View.GONE
+//        }
+//    }
 
-    fun checkNumberList(){
-        if (numberList.size >= 7){
-            numberList.clear()
-            btn_refresh.visibility = View.GONE
+    fun checkNumberList2(num: Int){
+        if (numberList.isEmpty()) numberList.add(num)
+        else if (numberList == arrayListOf(1)) numberList.add(num)
+        else if (numberList == arrayListOf(1,1)) numberList.add(num)
+        else if (numberList == arrayListOf(1,1,2)) numberList.add(num)
+        else if (numberList == arrayListOf(1,1,2,1)) numberList.add(num)
+        else if (numberList == arrayListOf(1,1,2,1,1)) numberList.add(num)
+        else if (numberList == arrayListOf(1,1,2,1,1,2)){
+            numberList.add(num)
+            if (numberList == bonusList) {
+                money = money + 100
+                tv_money.setText(money.toString())
+                numberList.clear()
+            }
+        }
+        else{
+            if (numberList == arrayListOf(1,1,1)){
+                numberList.remove(numberList[0])
+            }
+            else if (numberList == arrayListOf(1,2)) numberList.clear()
+            else{
+                numberList.clear()
+            }
+            numberList.add(num)
         }
     }
-
-
 }

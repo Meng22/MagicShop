@@ -21,7 +21,7 @@
                     tools:context=".MagicListActivity" android:background="#4A4A4A">
 
                 <TextView
-                        android:text="Level One"
+                        android:text="   Level One"
                         android:layout_width="match_parent"
                         android:layout_height="50dp" android:id="@+id/tv_level1" android:textSize="30sp"
                         android:background="#4A4A4A" android:textColor="#F2FFFFFF" android:padding="3dp"
