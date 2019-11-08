@@ -177,7 +177,6 @@ class ShopActivity : AppCompatActivity() {
                 updateList()
 
                 savePurchase(item)             //儲存進自己的魔法庫
-
                 dialog_purchase.dismiss()
             }
             else{
