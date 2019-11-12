@@ -14,7 +14,7 @@
             android:id="@+id/linearLayout1">
         <TextView
                 android:text="L1"
-                android:background="@color/ic_clikable"
+                android:background="@color/menu_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" android:id="@+id/menu_L1" android:layout_weight="1"
                 android:textSize="36sp" android:textColor="#F7FFFFFF" android:gravity="center"
@@ -22,26 +22,26 @@
         <TextView
                 android:text="L2"
                 android:layout_width="wrap_content"
-                android:background="@color/ic_clikable"
+                android:background="@color/menu_selected"
                 android:layout_height="match_parent" android:id="@+id/menu_L2" android:layout_weight="1"
                 android:textSize="36sp" android:textColor="#F7FFFFFF" android:gravity="center"/>
         <TextView
                 android:text="L3"
                 android:layout_width="wrap_content"
-                android:background="@color/ic_clikable"
+                android:background="@color/menu_selected"
                 android:layout_height="match_parent" android:id="@+id/menu_L3" android:layout_weight="1"
                 android:textSize="36sp" android:textColor="#F7FFFFFF" android:gravity="center"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/ic_clikable"
+                android:background="@color/menu_selected"
                 android:src="@drawable/ic_list"
                 android:id="@+id/menu_list"
                 android:layout_weight="1" android:padding="16dp"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/ic_clikable"
+                android:background="@color/menu_selected"
                 android:src="@drawable/ic_grid"
                 android:id="@+id/menu_grid"
                 android:layout_weight="1" android:padding="16dp"/>
@@ -60,7 +60,7 @@
         <TextView
                 android:text="$1050"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" android:id="@+id/tv_money"
+                android:layout_height="match_parent" android:id="@+id/tv_usermoney"
                 android:textColor="#FAFFFFFF" android:textSize="30sp"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView

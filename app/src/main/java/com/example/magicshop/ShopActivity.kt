@@ -15,6 +15,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_shop.*
+import okhttp3.ConnectionPool
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class ShopActivity : AppCompatActivity() {
     private var money: Int = 0
@@ -22,19 +30,42 @@ class ShopActivity : AppCompatActivity() {
     private val shopAdapter2 = ShopAdapter_grid()
     private var mode = false
     private var checkList = arrayListOf(1)
-    lateinit var storage1: SharedPreferences
-    lateinit var storage2: SharedPreferences
-    lateinit var storage3: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop)
-        storage1 = getSharedPreferences("LEVEL1", Activity.MODE_PRIVATE)
-        storage2 = getSharedPreferences("LEVEL2", Activity.MODE_PRIVATE)
-        storage3 = getSharedPreferences("LEVEL3", Activity.MODE_PRIVATE)
 
-        money = intent.getIntExtra("money", 2000) //defaultValue 默認值
-        tv_money.text = money.toString()
+        val myOkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(1000L, TimeUnit.SECONDS)
+            .readTimeout(1000L, TimeUnit.SECONDS)
+            .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
+            .build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://d6b3f29b.ngrok.io")
+            .client(myOkHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(ApiService::class.java)
+
+        val token = intent.getStringExtra("token")
+        money = intent.getIntExtra("money", 2000) //默認值
+        tv_usermoney.text = money.toString()
+
+        api.showMagic("bearer $token").enqueue(object: Callback<MagicList>{
+            override fun onFailure(call: Call<MagicList>, t: Throwable) {
+                println("no list")
+            }
+            override fun onResponse(call: Call<MagicList>, response: Response<MagicList>) {
+                val list = response.body()!!.data
+                val level1_list = list.filter { it.level == "one" }
+                val level2_list = list.filter { it.level == "two" }
+                val level3_list = list.filter { it.level == "three" }
+
+                println("$level1_list")
+            }
+        })
         //初始畫面
         switchList(1)
         menu_L1.isSelected = true
@@ -121,6 +152,11 @@ class ShopActivity : AppCompatActivity() {
     fun listAdapter(list: ArrayList<MagicItem>){
         rv_shop.layoutManager = LinearLayoutManager(this)
         rv_shop.adapter = shopAdapter1
+
+        //添加分隔線
+//        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+//        rv_shop.addItemDecoration(divider)
+
         shopAdapter1.setToClick(object : ShopAdapter_list.ItemClickListener{
             override fun toClick(item: MagicItem) {
                 purchaseDialog(item)
@@ -171,12 +207,11 @@ class ShopActivity : AppCompatActivity() {
         btn_confirm.setOnClickListener{
             if (money >= item.price){
                 money = money - item.price
-                tv_money.setText("$money")     //錢幣減少
+                tv_usermoney.setText("$money")     //錢幣減少
 
                 item.isPurchased = true        //更改為已購買狀態
                 updateList()
 
-                savePurchase(item)             //儲存進自己的魔法庫
                 dialog_purchase.dismiss()
             }
             else{
@@ -206,17 +241,6 @@ class ShopActivity : AppCompatActivity() {
         shopAdapter2.notifyDataSetChanged()
     }
 
-    fun savePurchase(item: MagicItem){
-        if (item.level == 1){
-            storage(storage1, item)
-        }
-        else if (item.level == 2){
-            storage(storage2, item)
-        }
-        else{
-            storage(storage3, item)
-        }
-    }
 
     fun storage(storage: SharedPreferences, item: MagicItem){
         val editor = storage.edit()

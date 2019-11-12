@@ -39,6 +39,7 @@ class ShopAdapter_list: RecyclerView.Adapter<ShopAdapter_list.ViewHolder>() {
         var tv_price = view.findViewById<TextView>(R.id.tv_price)
         val soldout = view.findViewById<TextView>(R.id.tv_soldout1)
 
+
         fun bind(item: MagicItem){
             imageView.setImageResource(item.image)
             tv_name.setText(item.name)

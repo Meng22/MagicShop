@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".LoginFragment">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:background="@drawable/login_background">
+        <ImageView
+                android:src="@drawable/logo"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content" android:id="@+id/imageView3" android:layout_marginTop="20dp"
+                android:scaleType="centerInside" android:layout_gravity="center"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/login_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:digits="1234567890qwertyuiopasdfghjklzxcvbnm"
+                        android:inputType="text"
+                        android:ems="10"
+                        android:id="@+id/login_account" android:hint="輸入使用者帳號" android:textColorHint="#F7CAC2C2"
+                        android:layout_gravity="center" android:layout_marginTop="20dp" android:textColor="#ffffff"
+                        android:text="123"/>
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:id="@+id/login_password" android:textColor="#ffffff" android:hint="輸入使用者密碼"
+                        android:textColorHint="#F7CAC2C2" android:layout_gravity="center"
+                        android:layout_marginTop="20dp" android:text="456"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/register_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="invisible">
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:ems="10"
+                        android:id="@+id/register_name" android:textColor="#ffffff" android:hint="輸入使用者名稱"
+                        android:textColorHint="#F7CAC2C2" android:layout_gravity="center"/>
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:digits="1234567890qwertyuiopasdfghjklzxcvbnm"
+                        android:inputType="text"
+                        android:ems="10"
+                        android:id="@+id/register_account" android:hint="輸入使用者帳號" android:textColorHint="#F7CAC2C2"
+                        android:layout_gravity="center" android:layout_marginTop="20dp" android:textColor="#ffffff"
+                        android:text="123"/>
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:id="@+id/register_password" android:textColor="#ffffff" android:hint="輸入使用者密碼"
+                        android:textColorHint="#F7CAC2C2" android:layout_gravity="center"
+                        android:layout_marginTop="20dp" android:text="456"/>
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:ems="10"
+                        android:id="@+id/register_email" android:hint="請輸入信箱" android:textColorHint="#F7CAC2C2"
+                        android:layout_gravity="center" android:layout_marginTop="20dp" android:textColor="#ffffff"/>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+                android:text="LOGIN"
+                android:layout_width="280dp"
+                android:background="@color/button_selected"
+                android:textColor="@color/button_textcolor_selected"
+                android:layout_height="wrap_content" android:id="@+id/btn_login" android:layout_gravity="center"
+                android:layout_marginTop="30dp" android:textIsSelectable="false"/>
+        <Button
+                android:text="SIGN UP"
+                android:layout_width="280dp"
+                android:background="@color/button_selected"
+                android:layout_height="wrap_content" android:id="@+id/btn_sign" android:textColor="@color/button_textcolor_selected"
+                android:gravity="center" android:layout_gravity="center" android:layout_marginTop="30dp"
+                android:clickable="false" android:textIsSelectable="false"/>
+    </LinearLayout>
+</FrameLayout>
