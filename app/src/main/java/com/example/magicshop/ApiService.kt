@@ -10,7 +10,8 @@ interface ApiService {
 
     //顯示使用者魔法
     @GET("/api/tags")
-    fun showMagic(@Header("Authorization") token: String): Call<MagicList>
+//    fun showMagic(@Header("Authorization") token: String): Call<MagicList>
+    fun showMagic(): Call<MagicList>
 
     //註冊
     @POST("/api/register")
@@ -20,8 +21,8 @@ interface ApiService {
     @POST("/api/login")
     fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
 
-    //登入後會員畫面
+    //使用者資料
     @GET("/api/accounts")
-    fun userpage(@Header("Authorization") token: String): Call<UserpageResponse>
+    fun userInfo(): Call<UserpageResponse>
 
 }

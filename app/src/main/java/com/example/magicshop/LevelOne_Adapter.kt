@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class LevelOne_Adapter: RecyclerView.Adapter<LevelOne_Adapter.ViewHolder>() {
-    private val magic_list: ArrayList<MagicItem> = arrayListOf()
+    private val magic_list: MutableList<MagicItems> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,17 +26,17 @@ class LevelOne_Adapter: RecyclerView.Adapter<LevelOne_Adapter.ViewHolder>() {
         val image = view.findViewById<ImageView>(R.id.magic_image)
         val shadow = view.findViewById<TextView>(R.id.magic_shadow)
 
-        fun bind(item: MagicItem){
-            image.setImageResource(item.image)
+        fun bind(item: MagicItems){
+//            image.setImageResource(item.image)
 
-            if (item.isPurchased == true){
+            if (item.store_id == null){
                 shadow.visibility = View.INVISIBLE
             }else{
                 shadow.visibility = View.VISIBLE
             }
         }
     }
-    fun update(newList: ArrayList<MagicItem>){
+    fun update(newList: MutableList<MagicItems>){
         magic_list.clear()
         magic_list.addAll(newList)
         notifyDataSetChanged()

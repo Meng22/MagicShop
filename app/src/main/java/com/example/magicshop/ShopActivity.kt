@@ -2,7 +2,6 @@ package com.example.magicshop
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,16 +12,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_shop.*
-import okhttp3.ConnectionPool
-import okhttp3.OkHttpClient
+import kotlinx.android.synthetic.main.activity_shop.tv_usermoney
+import kotlinx.android.synthetic.main.fragment_userpage.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class ShopActivity : AppCompatActivity() {
     private var money: Int = 0
@@ -30,85 +25,77 @@ class ShopActivity : AppCompatActivity() {
     private val shopAdapter2 = ShopAdapter_grid()
     private var mode = false
     private var checkList = arrayListOf(1)
+    lateinit var level1_list : MutableList<MagicItems>
+    lateinit var level2_list : MutableList<MagicItems>
+    lateinit var level3_list : MutableList<MagicItems>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop)
 
-        val myOkHttpClient = OkHttpClient.Builder()
-            .connectTimeout(1000L, TimeUnit.SECONDS)
-            .readTimeout(1000L, TimeUnit.SECONDS)
-            .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
-            .build()
+        money = intent.getIntExtra("money", 0)
+        tv_usermoney.setText("$money")
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://d6b3f29b.ngrok.io")
-            .client(myOkHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val api = retrofit.create(ApiService::class.java)
-
-        val token = intent.getStringExtra("token")
-        money = intent.getIntExtra("money", 2000) //默認值
-        tv_usermoney.text = money.toString()
-
-        api.showMagic("bearer $token").enqueue(object: Callback<MagicList>{
-            override fun onFailure(call: Call<MagicList>, t: Throwable) {
-                println("no list")
-            }
+        Api.service.showMagic().enqueue(object: Callback<MagicList>{
             override fun onResponse(call: Call<MagicList>, response: Response<MagicList>) {
-                val list = response.body()!!.data
-                val level1_list = list.filter { it.level == "one" }
-                val level2_list = list.filter { it.level == "two" }
-                val level3_list = list.filter { it.level == "three" }
+                val magicList = response.body()!!.data
+                level1_list = magicList.filter { it.level == "one" }.toMutableList()
+                level2_list = magicList.filter { it.level == "two" }.toMutableList()
+                level3_list = magicList.filter { it.level == "three" }.toMutableList()
 
-                println("$level1_list")
+                println("================$level3_list")
+
+                println("================beforeSWITCH")
+                //初始畫面
+                switchList(1)
+                menu_L1.isSelected = true
+                menu_list.isSelected = true
+
+                //切換魔法等級
+                menu_L1.setOnClickListener {
+                    switchList(1)
+                    checkType(1)
+                    menu_L1.isSelected = true
+                    menu_L2.isSelected = false
+                    menu_L3.isSelected = false
+
+                }
+                menu_L2.setOnClickListener {
+                    switchList(2)
+                    checkType(2)
+                    menu_L2.isSelected = true
+                    menu_L1.isSelected = false
+                    menu_L3.isSelected = false
+
+                }
+                menu_L3.setOnClickListener {
+                    switchList(3)
+                    checkType(3)
+                    menu_L3.isSelected = true
+                    menu_L1.isSelected = false
+                    menu_L2.isSelected = false
+                }
+
+                //切換檢視狀態
+                menu_list.setOnClickListener {
+                    mode = false
+                    changeType()
+                    menu_list.isSelected = true
+                    menu_grid.isSelected = false
+                }
+                menu_grid.setOnClickListener {
+                    mode = true
+                    changeType()
+                    menu_grid.isSelected = true
+                    menu_list.isSelected = false
+                }
+
+            }
+            override fun onFailure(call: Call<MagicList>, t: Throwable) {
+                println("=============$t")
             }
         })
-        //初始畫面
-        switchList(1)
-        menu_L1.isSelected = true
-        menu_list.isSelected = true
 
-        //切換魔法等級
-        menu_L1.setOnClickListener {
-            switchList(1)
-            checkType(1)
-            menu_L1.isSelected = true
-            menu_L2.isSelected = false
-            menu_L3.isSelected = false
-
-        }
-        menu_L2.setOnClickListener {
-            switchList(2)
-            checkType(2)
-            menu_L2.isSelected = true
-            menu_L1.isSelected = false
-            menu_L3.isSelected = false
-
-        }
-        menu_L3.setOnClickListener {
-            switchList(3)
-            checkType(3)
-            menu_L3.isSelected = true
-            menu_L1.isSelected = false
-            menu_L2.isSelected = false
-        }
-
-        //切換檢視狀態
-        menu_list.setOnClickListener {
-            mode = false
-            changeType()
-            menu_list.isSelected = true
-            menu_grid.isSelected = false
-        }
-        menu_grid.setOnClickListener {
-            mode = true
-            changeType()
-            menu_grid.isSelected = true
-            menu_list.isSelected = false
-        }
     }
 
     override fun onBackPressed() {
@@ -118,13 +105,11 @@ class ShopActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-
-
     fun switchList(type: Int){
         when(type){
             1->{
                 if (mode == false) {
-                    listAdapter(ShopList.list1)
+                    listAdapter(level1_list)
                 }
                 else{
                     gridAdapter(ShopList.list1)
@@ -133,7 +118,7 @@ class ShopActivity : AppCompatActivity() {
             }
             2->{
                 if (mode == false) {
-                    listAdapter(ShopList.list2)
+                    listAdapter(level2_list)
                 }
                 else{
                     gridAdapter(ShopList.list2)
@@ -141,7 +126,7 @@ class ShopActivity : AppCompatActivity() {
             }
             3->{
                 if (mode == false) {
-                    listAdapter(ShopList.list3)
+                    listAdapter(level3_list)
                 }
                 else{
                     gridAdapter(ShopList.list3)
@@ -149,17 +134,17 @@ class ShopActivity : AppCompatActivity() {
             }
         }
     }
-    fun listAdapter(list: ArrayList<MagicItem>){
+    fun listAdapter(list: MutableList<MagicItems>){
         rv_shop.layoutManager = LinearLayoutManager(this)
         rv_shop.adapter = shopAdapter1
 
         //添加分隔線
 //        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-//        rv_shop.addItemDecoration(divider)
+//        rv_shop.addItemDecoration(divider) purchaseDialog(item)
 
         shopAdapter1.setToClick(object : ShopAdapter_list.ItemClickListener{
-            override fun toClick(item: MagicItem) {
-                purchaseDialog(item)
+            override fun toClick(item: MagicItems) {
+//                purchaseDialog(item)
             }
         })
         shopAdapter1.update(list)
@@ -241,14 +226,4 @@ class ShopActivity : AppCompatActivity() {
         shopAdapter2.notifyDataSetChanged()
     }
 
-
-    fun storage(storage: SharedPreferences, item: MagicItem){
-        val editor = storage.edit()
-        val itemJson = Gson().toJson(item)
-        var i = 0
-        while (!storage.getString("$i", "").isNullOrEmpty()) {
-            i++
-        }
-        editor.putString("$i", itemJson).apply()
-    }
 }

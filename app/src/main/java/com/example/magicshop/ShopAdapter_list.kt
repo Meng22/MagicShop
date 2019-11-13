@@ -11,14 +11,13 @@ class ShopAdapter_list: RecyclerView.Adapter<ShopAdapter_list.ViewHolder>() {
     private var buyListener : ItemClickListener? = null
 
     interface ItemClickListener{
-        fun toClick(item: MagicItem)
+        fun toClick(item: MagicItems)
     }
     fun setToClick(listener: ItemClickListener){
         buyListener = listener
     }
 
-
-    private val magic_list: ArrayList<MagicItem> = arrayListOf()
+    private val magic_list: MutableList<MagicItems> = arrayListOf()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
@@ -40,17 +39,19 @@ class ShopAdapter_list: RecyclerView.Adapter<ShopAdapter_list.ViewHolder>() {
         val soldout = view.findViewById<TextView>(R.id.tv_soldout1)
 
 
-        fun bind(item: MagicItem){
-            imageView.setImageResource(item.image)
+        fun bind(item: MagicItems){
+//            imageView.setImageResource(item.image)
             tv_name.setText(item.name)
-            tv_price.text = "$ ${item.price.toString()}"
+            tv_price.text = "$ ${item.price}"
 
-            if (item.isPurchased == true){
-                soldout.visibility = View.VISIBLE
-                itemView.isEnabled = false
-            }else{
+            if (item.store_id == 0){
                 soldout.visibility = View.INVISIBLE
                 itemView.isEnabled = true
+
+            }else{
+                soldout.visibility = View.VISIBLE
+                itemView.isEnabled = false
+
 
             }
             itemView.setOnClickListener{
@@ -58,7 +59,7 @@ class ShopAdapter_list: RecyclerView.Adapter<ShopAdapter_list.ViewHolder>() {
             }
         }
     }
-    fun update(newList: ArrayList<MagicItem>){
+    fun update(newList: MutableList<MagicItems>){
         magic_list.clear()
         magic_list.addAll(newList)
         notifyDataSetChanged()

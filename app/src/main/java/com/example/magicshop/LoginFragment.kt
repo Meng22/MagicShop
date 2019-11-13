@@ -18,8 +18,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
-
 /**
  * A simple [Fragment] subclass.
  *
@@ -31,17 +29,10 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //初始畫面
-        login_layout.visibility = View.VISIBLE
-        btn_login.isSelected = true
-        register_layout.visibility = View.GONE
-        btn_sign.isSelected = false
+        loginPage()  //初始畫面
 
         btn_sign.setOnClickListener {
-            register_layout.visibility = View.VISIBLE
-            btn_sign.isSelected = true
-            login_layout.visibility = View.GONE
-            btn_login.isSelected = false
+            registerPage()
 
             if (register_name.text.isBlank() || register_account.text.isBlank() || register_password.text.isBlank() || register_email.text.isBlank()){
                 Toast.makeText(this.context, "請輸入註冊資料", Toast.LENGTH_SHORT).show()
@@ -49,21 +40,22 @@ class LoginFragment : Fragment() {
                 Api.service.register(RegisterRequest("${register_name.text}", "${register_account.text}", "${register_password.text}", "${register_email.text}")).enqueue(
                     object : Callback<RegisterResponse> {
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                            println("register failed")
+                            println("==========$t")
                         }
                         override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                            val register_token = response.body()!!.api_token
-                            println("$register_token")
+                            println("=============${response.message()}")
+                            if (response.isSuccessful){  //安全性
+                                val responsebody = response.body()
+                                val register_token = responsebody!!.api_token
+                                val message = responsebody.message
+                                println("==========$register_token")
+                                println("==========$message")
+                                Api.token = register_token
 
-                            //註冊儲存token
-                            val tokenSave = (activity as MainActivity).getSharedPreferences("user", Activity.MODE_PRIVATE)
-                            val editor = tokenSave.edit()
-                            editor.putString("token", "$register_token").apply()
-
-                            //跳轉使用者頁面
-                            val manager = (activity as MainActivity).supportFragmentManager
-                            val userTransaction = manager.beginTransaction()
-                            userTransaction.replace(R.id.framelayout, UserpageFragment()).commit()
+                                //註冊完跳登入頁
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                loginPage()
+                            }
                         }
                     }
                 )
@@ -71,13 +63,10 @@ class LoginFragment : Fragment() {
         }
 
         btn_login.setOnClickListener {
-            login_layout.visibility = View.VISIBLE
-            btn_login.isSelected = true
-            register_layout.visibility = View.GONE
-            btn_sign.isSelected = false
+            loginPage()
 
             if (login_account.text.isBlank() || login_password.text.isBlank()){
-                Toast.makeText(this.context, "請輸入帳號密碼", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context, "請輸入帳號及密碼", Toast.LENGTH_SHORT).show()
             }else{
                 Api.service.login(LoginRequest("${login_account.text}","${login_password.text}")).enqueue(
                     object : Callback<LoginResponse>{
@@ -85,25 +74,45 @@ class LoginFragment : Fragment() {
                         println("==========$t")
                     }
                     override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                        val login_token = response.body()!!.data.api_token
-                        val login_name = response.body()!!.data.name
-                        val login_money = response.body()!!.data.balance
-                        println("==================$login_token")
+                        if(response.code() == 500){
+                            Toast.makeText(context, "無法登入", Toast.LENGTH_SHORT).show()
+                        }
+                        else if (response.isSuccessful){
+                            val responsebody = response.body()
+                            val login_token = responsebody!!.data.api_token
+                            val message = responsebody.message
+                            Api.token = login_token
+                            println("================$login_token")
 
-                        val tokenSave = (activity as MainActivity).getSharedPreferences("storage", Activity.MODE_PRIVATE)
-                        val editor = tokenSave.edit()
-                        val userJson = Gson().toJson(saveUser(login_name, login_money, login_token))
-                        editor.putString("userJson", userJson).apply()
+                            //儲存完token後，切換使用者頁面
+                            if (chk_remember.isChecked){
+                                val tokenSave = (activity as MainActivity).getSharedPreferences("storage", Activity.MODE_PRIVATE)
+                                val editor = tokenSave.edit()
+                                println("================$login_token")
+                                editor.putString("userToken", login_token).apply()
+                            }
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
-                        //儲存完token後，切換使用者頁面
-                        val manager = (activity as MainActivity).supportFragmentManager
-                        val userTransaction = manager.beginTransaction()
-                        userTransaction.replace(R.id.framelayout, UserpageFragment()).commit()
-
+                            val manager = (activity as MainActivity).supportFragmentManager
+                            val userTransaction = manager.beginTransaction()
+                            userTransaction.replace(R.id.framelayout, UserpageFragment()).commit()
+                        }
                     }
                 })
             }
         }
+    }
+    fun loginPage(){
+        login_layout.visibility = View.VISIBLE
+        btn_login.isSelected = true
+        register_layout.visibility = View.GONE
+        btn_sign.isSelected = false
+    }
+    fun registerPage(){
+        register_layout.visibility = View.VISIBLE
+        btn_sign.isSelected = true
+        login_layout.visibility = View.GONE
+        btn_login.isSelected = false
     }
 
 

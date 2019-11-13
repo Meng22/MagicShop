@@ -8,6 +8,7 @@ class ShopList {
     }
 }
 
+
     val list_LEVEL1= arrayListOf(
         MagicItem((R.drawable.level1_1), "保護罩  Shield", 800,1),
         MagicItem((R.drawable.level1_2), "光箭  Energy Bolt", 300,1),

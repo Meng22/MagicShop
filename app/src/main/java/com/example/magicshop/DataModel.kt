@@ -73,7 +73,7 @@ data class LoginDetail(
 )
 
 //儲存進sharepreference格式
-data class saveUser(val name: String, val balance: Int, val token: String)
+data class SaveUser(val name: String, val balance: Int, val token: String)
 
 //登入會員頁面
 data class UserpageResponse(

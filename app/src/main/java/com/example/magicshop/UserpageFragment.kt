@@ -8,19 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.gson.Gson
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_userpage.*
-import kotlinx.android.synthetic.main.list_itemview.*
-import okhttp3.ConnectionPool
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
-
-
 
 /**
  * A simple [Fragment] subclass.
@@ -38,23 +30,29 @@ class UserpageFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val tokenSave = (activity as MainActivity).getSharedPreferences("storage", Activity.MODE_PRIVATE)
-        val userJson = tokenSave.getString("userJson","")
-        val user = Gson().fromJson(userJson, saveUser::class.java)
 
-        //初始畫面
-        val name = user.name
-        val balance = user.balance
-        val token = user.token
-        tv_username.setText("$name")
-        tv_usermoney.setText("$balance")
-        money = balance
-        println("===================$token")
+        Api.service.userInfo().enqueue(object : Callback<UserpageResponse>{
+            override fun onFailure(call: Call<UserpageResponse>, t: Throwable) {
+                println("=============$t")
+            }
+            override fun onResponse(call: Call<UserpageResponse>, response: Response<UserpageResponse>) {
+                val responsebody = response.body()
+                val user = responsebody!!.data
+
+                //初始畫面
+                val name = user.name
+                val balance = user.balance
+                tv_username.setText("$name")
+                tv_usermoney.setText("$balance")
+                money = balance
+
+            }
+        })
+
 
         //進入商店
         btn_shop.setOnClickListener {
             val intent = Intent(this.context, ShopActivity::class.java)
-            intent.putExtra("token", token)
             intent.putExtra("money", money)
             startActivityForResult(intent, 0)
         }
@@ -66,37 +64,28 @@ class UserpageFragment : Fragment() {
         }
 
         //登出
-        btn_deleteToken.setOnClickListener {
-            val tokenSave = (activity as MainActivity).getSharedPreferences("user", Activity.MODE_PRIVATE)
+        btn_logout.setOnClickListener {
+
+            //清除token
+            val tokenSave = (activity as MainActivity).getSharedPreferences("storage", Activity.MODE_PRIVATE)
             val editor = tokenSave.edit()
-            editor.remove("token").apply()
+            editor.remove("userToken").apply()
 
             //跳轉登入頁面
+            Toast.makeText(context, "登出成功", Toast.LENGTH_SHORT).show()
             val manager = (activity as MainActivity).supportFragmentManager
             val userTransaction = manager.beginTransaction()
             userTransaction.replace(R.id.framelayout, LoginFragment()).commit()
 
         }
 
-        //點擊娃娃增加金錢
+        //點擊娃娃
         upperButton.setOnClickListener {
             checkNumberList2(1)
         }
         downerButton.setOnClickListener {
             checkNumberList2(2)
         }
-    }
-
-    //更新餘額
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        data?.extras.let {
-            if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
-                money = it!!.getInt("updateMoney", 2000)
-                tv_usermoney.setText("$money")
-            }
-        }
-
     }
 
     //增加錢幣
